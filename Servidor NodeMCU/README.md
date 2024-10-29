@@ -30,6 +30,7 @@
 ```cpp
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+```
 
 <p>Essas bibliotecas permitem a conexão Wi-Fi e a criação de um servidor web no ESP8266.</p> 
 
@@ -40,6 +41,7 @@
 ```cpp
 const char* ssid = "Nome_da_rede";
 const char* password = "Senha_da_rede";
+```
 
 <p>Em seguida, configure o endereço IP do NodeMCU colocando um IP da sua faixa de rede:</p>
 
@@ -47,6 +49,7 @@ const char* password = "Senha_da_rede";
 IPAddress local_IP(192,168,227,241); // Altere para o IP desejado
 IPAddress gateway(192,168,227,217);
 IPAddress subnet(255,255,255,0);
+```
 
 <h3>Funções do Servidor Web</h3> 
 
