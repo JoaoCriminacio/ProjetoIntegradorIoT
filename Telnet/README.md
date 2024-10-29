@@ -1,4 +1,4 @@
-# Controle de LED com ESP8266 via Telnet e Atualizações OTA
+# Controle de Lâmpada com ESP8266 via Telnet e Atualizações OTA
 
 Este projeto utiliza o ESP8266 para controlar uma lampada remotamente através de uma conexão Telnet e realizar atualizações OTA. O sistema é ideal para monitoramento remoto e permite a fácil atualização do firmware do ESP8266 sem necessidade de conexão física com o dispositivo.
 
@@ -45,7 +45,7 @@ O principal objetivo deste projeto é oferecer uma solução prática para contr
 ### Configuração
 
 1. Defina o nome da rede (`ssid`) e a senha (`password`) no código para conectar o ESP8266 à sua rede Wi-Fi.
-2. Conecte o LED ao pino D1 (GPIO 5) do ESP8266.
+2. Conecte a Lâmpada ao pino D1 (GPIO 5) do ESP8266.
 
 ### Upload do Código
 
@@ -56,7 +56,7 @@ O principal objetivo deste projeto é oferecer uma solução prática para contr
 1. Abra o Serial Monitor na IDE para verificar o endereço IP atribuído ao ESP8266 ao se conectar ao Wi-Fi.
 2. Conecte-se ao dispositivo via Telnet usando o IP exibido e a porta 23.
 
-### Controle do LED
+### Controle da Lâmpada
 
 - Envie o comando `1` para ligar a lampada e `0` para desligá-lo.
 - Caso um comando inválido seja enviado, o sistema informará o erro.
