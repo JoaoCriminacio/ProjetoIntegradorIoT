@@ -26,3 +26,10 @@ Este código é um programa para ESP8266 que configura o dispositivo para se con
 ### Objetivo e Utilização
 
 Este código é útil para projetos de IoT onde é necessário atualizar o firmware do ESP8266 de maneira prática e rápida. A funcionalidade OTA elimina a necessidade de conexão física para realizar atualizações, permitindo que dispositivos já instalados em locais de difícil acesso possam receber novas funcionalidades ou correções de forma remota.
+
+## Requisitos
+
+- **ESP8266**
+- **Rede Wi-Fi**
+- **Visual Studio Code**
+- **PlataformIO**
