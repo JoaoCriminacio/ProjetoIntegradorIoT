@@ -19,7 +19,7 @@
   <li>Plug Macho Tomada.</li>
   <li>Soquete Bocal de Lâmpada.</li>
   <li>Plug Tomada Fêmea.</li>
-  <li>Módulo Relé 1 canal 5v</li>
+  <li>Módulo Relé 1 canal 5v.</li>
 </ul>
 
 <h2>Código do Projeto</h2>
