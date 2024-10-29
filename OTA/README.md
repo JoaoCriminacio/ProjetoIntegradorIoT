@@ -11,7 +11,7 @@ Este código é um programa para ESP8266 que configura o dispositivo para se con
    - `WiFi.begin(ssid, password);` inicia a tentativa de conexão.
    - Um loop de reconexão é implementado com `while(WiFi.waitForConnectResult() != WL_CONNECTED)`, que garante que o ESP8266 continue tentando conectar até que seja bem-sucedido. Caso a conexão falhe, ele exibe uma mensagem e tenta novamente após 5 segundos.
 
-2. **Configuração OTA (Over-The-Air)**:
+2. **Configuração OTA**:
 
    - Esta funcionalidade permite atualizações remotas do firmware através de OTA.
    - `ArduinoOTA.onStart` executa uma função de callback quando o processo de atualização começa, indicando o início da atualização.
