@@ -37,7 +37,7 @@
 
 <h3>Configurações de Rede</h3> 
 
-<p>No início do código, insira o nomde (SSID) e a senha da rede Wi-Fi:</p>
+<p>No início do código, insira o nome (SSID) e a senha da rede Wi-Fi:</p>
 
 ```cpp
 const char* ssid = "Nome_da_rede";
