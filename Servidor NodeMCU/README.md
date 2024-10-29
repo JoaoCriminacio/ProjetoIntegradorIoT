@@ -1,4 +1,4 @@
-# Projeto: Controle de LED via Servidor Web com NodeMCU
+# Controle de LED via Servidor Web com NodeMCU
 
 <p>Este projeto cria um servidor web em um microcontrolador, permitindo o controle remoto de um LED conectado ao pino D1 através de uma interface web.</p>
 
