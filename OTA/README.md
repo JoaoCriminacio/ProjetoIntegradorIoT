@@ -1,6 +1,6 @@
 # Projeto OTA
 
-<h5>Este código é um programa para ESP8266 que configura o dispositivo para se conectar a uma rede Wi-Fi e suporta atualizações OTA. Ele permite enviar novos firmwares para o ESP8266 remotamente, o que facilita a atualização sem necessidade de cabos. Abaixo está uma explicação detalhada das principais partes do código:</h5>
+Este código é um programa para ESP8266 que configura o dispositivo para se conectar a uma rede Wi-Fi e suporta atualizações OTA. Ele permite enviar novos firmwares para o ESP8266 remotamente, o que facilita a atualização sem necessidade de cabos. Abaixo está uma explicação detalhada das principais partes do código:
 
 ## Descrição das Funcionalidades
 
