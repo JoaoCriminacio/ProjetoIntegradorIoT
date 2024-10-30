@@ -33,3 +33,109 @@ Este código é útil para projetos de IoT onde é necessário atualizar o firmw
 - **Rede Wi-Fi**
 - **Visual Studio Code**
 - **PlataformIO**
+
+## Detalhamento do Código
+
+<p>Este projeto usa as bibliotecas:</p>
+
+```cpp
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+```
+<p>Essas bibliotecas permitem a conexão Wi-Fi e a criação de um servidor web no ESP8266.</p> 
+
+<h3>Configurações de Rede</h3> 
+
+---------------------------------------------------------------------------------------------
+
+<p>No início do código, insira o nomde (SSID) e a senha da rede Wi-Fi:</p>
+
+```cpp
+const char* ssid = "Nome_da_rede";
+const char* password = "Senha_da_rede";
+```
+
+---------------------------------------------------------------------------------------------
+
+```cpp
+void setup() {
+  /* Abrir uma comunicação serial */
+  Serial.begin(9600);
+  
+  /* Modo do Wi-Fi */
+  WiFi.mode(WIFI_STA);
+  
+  /* Iniciar colocando as credenciais */
+  WiFi.begin(ssid, password);
+}
+```
+
+- **Serial.begin(9600):** Define a taxa de comunicação serial em 9600 bps (bits por segundo), permitindo monitoramento e depuração do ESP8266.
+  
+- **WiFi.mode(WIFI_STA):** Define o ESP8266 como uma estação (STA), habilitando-o para conectar-se a redes Wi-Fi existentes.
+  
+- **WiFi.begin(ssid, password):** Tenta conectar o ESP8266 à rede Wi-Fi especificada pelas variáveis `ssid` (nome da rede) e `password` (senha).
+
+Este código é a base para conectar o ESP8266 a uma rede Wi-Fi, preparando-o para comunicação e interação com outros dispositivos na mesma rede.
+
+---------------------------------------------------------------------------------------------
+
+```cpp
+/* Funções assíncronas */
+ArduinoOTA.onStart([](){
+  Serial.println("Start");
+});
+ArduinoOTA.onEnd([](){
+  Serial.println("\nEnd");
+});
+ArduinoOTA.onProgress([](unsigned int progress, unsigned int total){
+  Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+});
+```
+
+- **ArduinoOTA.onStart:** Define uma função de callback que é executada no início da atualização OTA. Quando a atualização começa, a mensagem `"Start"` é exibida no monitor serial.
+
+- **ArduinoOTA.onEnd:** Define uma função de callback para o final da atualização. Quando a atualização termina, a mensagem `"End"` é exibida no monitor serial.
+
+- **ArduinoOTA.onProgress:** Exibe o progresso da atualização em tempo real. À medida que a atualização ocorre, o monitor serial mostra o progresso percentual, com o valor calculado em relação ao total de dados a serem transferidos.
+
+---------------------------------------------------------------------------------------------
+
+```cpp
+/* Função assíncrona que lida com os erros */
+ArduinoOTA.onError([](ota_error_t error){
+  Serial.printf("Error[%u]: ", error);
+  if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+  else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+  else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+  else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+});
+ArduinoOTA.begin();
+Serial.println("Pronto");
+Serial.print("IP: ");
+Serial.println(WiFi.localIP());
+```
+
+- **ArduinoOTA.onError:** Define uma função de callback para tratamento de erros que podem ocorrer durante a atualização OTA. Dependendo do tipo de erro, diferentes mensagens são exibidas:
+  - **OTA_AUTH_ERROR:** Falha na autenticação.
+  - **OTA_BEGIN_ERROR:** Falha ao iniciar o processo de atualização.
+  - **OTA_CONNECT_ERROR:** Falha na conexão para atualização.
+  - **OTA_RECEIVE_ERROR:** Falha ao receber os dados da atualização.
+
+- **ArduinoOTA.begin():** Inicializa o serviço OTA, preparando o ESP8266 para receber atualizações remotas.
+
+- **Serial.println("Pronto") e Serial.print("IP: "):** Informa que o ESP8266 está pronto e exibe o endereço IP obtido na rede Wi-Fi, permitindo fácil identificação do dispositivo para futuras conexões OTA.
+
+---------------------------------------------------------------------------------------------
+
+```cpp
+void loop() {
+  ArduinoOTA.handle();
+}
+```
+
+### Explicação:
+
+- **ArduinoOTA.handle():** Mantém a conexão OTA ativa e verifica se há uma atualização OTA pendente. Sempre que `ArduinoOTA.handle()` é chamado, ele processa solicitações OTA, permitindo que o ESP8266 aceite e aplique atualizações enviadas pela rede.
+
+Essa chamada no loop principal garante que o ESP8266 esteja continuamente pronto para receber atualizações OTA, evitando a necessidade de reiniciar o dispositivo para aplicar uma nova versão do firmware.
