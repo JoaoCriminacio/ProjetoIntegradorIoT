@@ -2,99 +2,66 @@
 
 Este projeto utiliza o ESP8266 para controlar uma lampada remotamente através de uma conexão Telnet e realizar atualizações OTA. O sistema é ideal para monitoramento remoto e permite a fácil atualização do firmware do ESP8266 sem necessidade de conexão física com o dispositivo.
 
-
-
-## Funcionalidades
+## Descrição das Funcionalidades
 
 - **Conexão Wi-Fi e Controle Remoto:** Conecta o ESP8266 à rede Wi-Fi para comunicação remota.
 - **Servidor Telnet:** Permite o controle da lampada por meio de comandos enviados via Telnet, proporcionando um monitoramento remoto fácil e eficiente.
 - **Atualizações OTA (Over-the-Air):** Suporta atualização do código via OTA, permitindo que o firmware do ESP8266 seja atualizado remotamente sem precisar conectar o dispositivo fisicamente.
 
-
-
 ## Objetivos
 
-O principal objetivo deste projeto é oferecer uma solução prática para controlar uma lampada atraves do Telnet. Utilizando a tecla 0 para desligar a lampada e a tecla 1 para ligar a lampada.
-
-
-
+O principal objetivo deste projeto é oferecer uma solução prática para controlar uma lampada através do Telnet. Utilizando a tecla 0 para desligar a lampada e a tecla 1 para ligar a lampada.
 
 ## Requisitos
 
-### Hardware
-
-- ESP8266
-- Lampada conectado ao pino D1 (GPIO 5)
-- Fonte de alimentação para o ESP8266
-
-### Software
-
-- **Visual Studio Code:** Para editar e fazer o upload do código ao ESP8266.
-
-## Configuração de Rede
-
-- Acesso a uma rede Wi-Fi e as credenciais de login (SSID e senha).
-
-### Configuração
-
-1. Defina o nome da rede (`ssid`) e a senha (`password`) no código para conectar o ESP8266 à sua rede Wi-Fi.
-2. Conecte a Lâmpada ao pino D1 (GPIO 5) do ESP8266.
-
-### Upload do Código
-
-- Use o Visual Studio Code para carregar o código no ESP8266.
-
-### Conexão e Monitoramento
-
-1. Abra o Serial Monitor na IDE para verificar o endereço IP atribuído ao ESP8266 ao se conectar ao Wi-Fi.
-2. Conecte-se ao dispositivo via Telnet usando o IP exibido e a porta 23.
-
-### Controle da Lâmpada
-
-- Envie o comando `1` para ligar a lampada e `0` para desligá-lo.
-- Caso um comando inválido seja enviado, o sistema informará o erro.
-
-### Atualização OTA
-
-- O recurso OTA estará ativo após a conexão Wi-Fi. Para atualizar o firmware remotamente, use a funcionalidade OTA do Arduino IDE.
-
-## Contribuições
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
+- **ESP8266**
+- **Lâmpada**
+- **Módulo Relé 1 canal 5v**
+- **2 metros de fio de 1,5mm²**
+- **Plug Macho Tomada**
+- **Plug Tomada Fêmea**
+- **Soquete Bocal de Lâmpada**
+- **Rede Wi-Fi**
+- **Visual Studio Code**
+- **PlatformIO**
 
 ## Detalhamento do Código
 
-<h3>Bibliotecas Necessárias</h3>
+### Bibliotecas Necessárias
+---------------------------------------------------------------------------------------------
 
-<p>Este projeto usa as bibliotecas:</p>
+Este projeto usa as bibliotecas:
 
 ```cpp
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 ```
 
-<p>Essas bibliotecas permitem a conexão Wi-Fi e a criação de um servidor web no ESP8266.</p> 
+Essas bibliotecas permitem a conexão Wi-Fi e a criação de um servidor web no ESP8266.
 
-<h3>Configurações de Rede</h3> 
+### Configurações de Rede
+---------------------------------------------------------------------------------------------
 
-<p>No início do código, insira o nome (SSID) e a senha da rede Wi-Fi:</p>
+No início do código, insira o nome (SSID) e a senha da rede Wi-Fi:
 
 ```cpp
 const char* ssid = "Nome_da_rede";
 const char* password = "Senha_da_rede";
 ```
 
-Declaração de Variáveis:
+### Declaração de Variáveis
+---------------------------------------------------------------------------------------------
 
 ```cpp
 WiFiServer server(23);
 WiFiClient client;
 ```
 
-<code>WiFiServer server(23)</code>: Cria uma instância do servidor WiFi que escuta na porta 23, padrão para Telnet.
+<code>WiFiServer server(23)</code>: Cria uma instância do servidor WiFi que escuta na porta 23, padrão para Telnet. <br>
 <code>WiFiClient client</code>: Declara um cliente WiFi que será usado para gerenciar a conexão com o cliente Telnet.
 
-Função setup():
+### Função setup()
+---------------------------------------------------------------------------------------------
 
 ```cpp
 void setup() {
@@ -102,27 +69,30 @@ void setup() {
 
 A função <code>setup()</code> é chamada uma vez quando o dispositivo é ligado. Ela configura o ambiente inicial do microcontrolador.
 
-Configuração do LED e Serial:
+### Configuração do LED e Serial
+---------------------------------------------------------------------------------------------
 
 ```cpp
 pinMode(LED_PIN, OUTPUT);
   Serial.begin(9600);
 ```
 
-<code>pinMode(LED_PIN, OUTPUT)</code>: Configura o pino do LED como saída.
-<code>Serial.begin(9600)</code>: Inicializa a comunicação serial a 9600 bps para debug
+<code>pinMode(LED_PIN, OUTPUT)</code>: Configura o pino do LED como saída. <br>
+<code>Serial.begin(9600)</code>: Inicializa a comunicação serial a 9600 bps para debug.
 
-Conexão WiFi:
+### Conexão WiFi
+---------------------------------------------------------------------------------------------
 
 ```cpp
 WiFi.mode(WIFI_STA);
 WiFi.begin(ssid, password);
 ```
 
-<code>WiFi.mode(WIFI_STA)</code>: Configura o modo WiFi como estação (STA) para se conectar a uma rede existente.
+<code>WiFi.mode(WIFI_STA)</code>: Configura o modo WiFi como estação (STA) para se conectar a uma rede existente. <br>
 <code>WiFi.begin(ssid, password)</code>: Inicia a conexão com a rede WiFi usando o SSID e a senha definidos.
 
-Verificação de Conexão:
+### Verificação de Conexão
+---------------------------------------------------------------------------------------------
 
 ```cpp
 while (WiFi.waitForConnectResult() != WL_CONNECTED) {
@@ -134,7 +104,8 @@ while (WiFi.waitForConnectResult() != WL_CONNECTED) {
 
 Um loop que tenta conectar-se à rede WiFi até que a conexão seja bem-sucedida, com mensagens de erro exibidas no console.
 
-Configuração de Atualização OTA:
+### Configuração de Atualização OTA
+---------------------------------------------------------------------------------------------
 
 ```cpp
 ArduinoOTA.onStart([]() {
@@ -142,7 +113,7 @@ ArduinoOTA.onStart([]() {
   });
 ```
 
-<code>ArduinoOTA.onStart</code>: Configura um callback para ser chamado ao iniciar uma atualização OTA.:
+<code>ArduinoOTA.onStart</code>: Configura um callback para ser chamado ao iniciar uma atualização OTA.
 
 ```cpp
 ArduinoOTA.onEnd([]() {
@@ -150,7 +121,7 @@ ArduinoOTA.onEnd([]() {
 });
 ```
 
-<code>ArduinoOTA.onEnd</code>: Callback que é executado quando a atualização é concluída:
+<code>ArduinoOTA.onEnd</code>: Callback que é executado quando a atualização é concluída.
 
 ```cpp
 ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
@@ -158,7 +129,7 @@ ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
 });
 ```
 
-<code>ArduinoOTA.onProgress</code>: Callback que exibe o progresso da atualização OTA:
+<code>ArduinoOTA.onProgress</code>: Callback que exibe o progresso da atualização OTA.
 
 ```cpp
 ArduinoOTA.onError([](ota_error_t error) {
@@ -171,7 +142,7 @@ ArduinoOTA.onError([](ota_error_t error) {
 });
 ```
 
-<code>ArduinoOTA.onError</code>: Callback que trata erros durante o processo de OTA, detalhando o tipo de erro ocorrido:
+<code>ArduinoOTA.onError</code>: Callback que trata erros durante o processo de OTA, detalhando o tipo de erro ocorrido.
 
 ```cpp
 ArduinoOTA.begin();
@@ -180,8 +151,8 @@ Serial.print("Endereço IP: ");
 Serial.println(WiFi.localIP());
 ```
 
-<code>ArduinoOTA.begin()</code>: Inicializa o serviço OTA.
-<code>Serial.print</code>: Exibe o endereço IP local do microcontrolador:
+<code>ArduinoOTA.begin()</code>: Inicializa o serviço OTA. <br>
+<code>Serial.print</code>: Exibe o endereço IP local do microcontrolador.
 
 ```cpp
 server.begin();
@@ -189,10 +160,11 @@ server.setNoDelay(true);
 Serial.println("Servidor Telnet iniciado...");
 ```
 
-<code>server.begin()</code>: Inicia o servidor Telnet.
+<code>server.begin()</code>: Inicia o servidor Telnet. <br>
 <code>server.setNoDelay(true)</code>: Configura o servidor para não ter delay, melhorando a performance.
 
-Função loop():
+### Função loop()
+---------------------------------------------------------------------------------------------
 
 A função <code>loop()</code> é chamada repetidamente e gerencia as interações em tempo real.
 
@@ -200,7 +172,8 @@ A função <code>loop()</code> é chamada repetidamente e gerencia as interaçõ
 void loop()
 ```
 
-Manutenção da Conexão OTA:
+### Manutenção da Conexão OTA
+---------------------------------------------------------------------------------------------
 
 ```cpp
 ArduinoOTA.handle();
@@ -208,7 +181,8 @@ ArduinoOTA.handle();
 
 <code>ArduinoOTA.handle()</code>: Processa as atualizações OTA, permitindo que o microcontrolador responda a solicitações de atualização.
 
-Gerenciamento de Clientes Telnet:
+### Gerenciamento de Clientes Telnet
+---------------------------------------------------------------------------------------------
 
 ```cpp
 if (server.hasClient()) {
@@ -223,10 +197,11 @@ if (server.hasClient()) {
 }
 ```
 
-<code>server.hasClient()</code>: Verifica se há um cliente tentando se conectar.
+<code>server.hasClient()</code>: Verifica se há um cliente tentando se conectar. <br>
 O código dentro do bloco gerencia a conexão com o cliente e exibe uma mensagem de boas-vindas.
 
-Leitura e Execução de Comandos:
+### Leitura e Execução de Comandos
+---------------------------------------------------------------------------------------------
 
 ```cpp
 if (client && client.connected() && client.available()) {
