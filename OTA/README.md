@@ -1,8 +1,8 @@
-<h1 text-center>PROJETO OTA<h1>
+# Projeto OTA
 
 <h5>Este código é um programa para ESP8266 que configura o dispositivo para se conectar a uma rede Wi-Fi e suporta atualizações OTA. Ele permite enviar novos firmwares para o ESP8266 remotamente, o que facilita a atualização sem necessidade de cabos. Abaixo está uma explicação detalhada das principais partes do código:</h5>
 
-### Descrição das Funcionalidades
+## Descrição das Funcionalidades
 
 1. **Conexão Wi-Fi**:
 
@@ -23,7 +23,7 @@
    - `ArduinoOTA.begin()` inicializa o processo OTA, tornando o dispositivo pronto para receber novas atualizações remotamente.
    - Dentro da função `loop`, `ArduinoOTA.handle()` monitora constantemente a conexão OTA, permitindo que o ESP8266 entre em modo de atualização assim que um novo firmware for detectado.
 
-### Objetivo e Utilização
+## Objetivo e Utilização
 
 Este código é útil para projetos de IoT onde é necessário atualizar o firmware do ESP8266 de maneira prática e rápida. A funcionalidade OTA elimina a necessidade de conexão física para realizar atualizações, permitindo que dispositivos já instalados em locais de difícil acesso possam receber novas funcionalidades ou correções de forma remota.
 
@@ -36,19 +36,22 @@ Este código é útil para projetos de IoT onde é necessário atualizar o firmw
 
 ## Detalhamento do Código
 
-<p>Este projeto usa as bibliotecas:</p>
+### Bibliotecas Necessárias
+---------------------------------------------------------------------------------------------
+
+Este projeto usa as bibliotecas:
 
 ```cpp
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 ```
-<p>Essas bibliotecas permitem a conexão Wi-Fi e a criação de um servidor web no ESP8266.</p> 
 
-<h3>Configurações de Rede</h3> 
+Essas bibliotecas permitem a conexão Wi-Fi e a criação de um servidor web no ESP8266.
 
+### Configurações de Rede
 ---------------------------------------------------------------------------------------------
 
-<p>No início do código, insira o nomde (SSID) e a senha da rede Wi-Fi:</p>
+No início do código, insira o nomde (SSID) e a senha da rede Wi-Fi:
 
 ```cpp
 const char* ssid = "Nome_da_rede";
@@ -134,7 +137,8 @@ void loop() {
 }
 ```
 
-### Explicação:
+## Explicação
+---------------------------------------------------------------------------------------------
 
 - **ArduinoOTA.handle():** Mantém a conexão OTA ativa e verifica se há uma atualização OTA pendente. Sempre que `ArduinoOTA.handle()` é chamado, ele processa solicitações OTA, permitindo que o ESP8266 aceite e aplique atualizações enviadas pela rede.
 
