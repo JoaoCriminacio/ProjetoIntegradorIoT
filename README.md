@@ -5,6 +5,10 @@ Alunos do 4° período de sistemas de informação da Unimater. <br>
 Eduardo Giasson Correa, João Ricardo Criminácio e Yuri Schenkel. 
 </p>
 
+<p align="center">
+  <img alt="Trio CCY" src="./.github/Trio CCY.jpg" width="700">
+</p>
+
 ## 🚀 Tecnologias
 
 Esse projeto foi desenvolvido com as seguintes tecnologias:
