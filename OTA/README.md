@@ -137,7 +137,7 @@ void loop() {
 }
 ```
 
-## Explicação
+### Explicação
 ---------------------------------------------------------------------------------------------
 
 - **ArduinoOTA.handle():** Mantém a conexão OTA ativa e verifica se há uma atualização OTA pendente. Sempre que `ArduinoOTA.handle()` é chamado, ele processa solicitações OTA, permitindo que o ESP8266 aceite e aplique atualizações enviadas pela rede.
