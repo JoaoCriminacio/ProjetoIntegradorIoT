@@ -3,7 +3,7 @@
 #include <ESP8266WebServer.h>
 
 const char* ssid = "Galaxy M515ABA";
-const char* password = "pediuasenha=mamou";
+const char* password = "";
 
 ESP8266WebServer server(80);
 
