@@ -9,7 +9,7 @@ Este projeto cria um servidor web no microcontrolador NodeMCU, permitindo o cont
 - Interface web para ligar e desligar o LED remotamente.
 - Suporte a atualizações OTA para facilitar a manutenção do código.
 
-## Componentes Necessários
+## Requisitos
 
 - NodeMCU (ESP8266).
 - LED (integrado ao NodeMCU).
