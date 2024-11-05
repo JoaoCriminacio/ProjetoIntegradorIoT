@@ -1,73 +1,182 @@
-# Controle de Lâmpada via Servidor Web com NodeMCU
+# Controle de LED via Servidor Web com NodeMCU
 
-<p>Este projeto cria um servidor web em um microcontrolador, permitindo o controle remoto de um LED conectado ao pino D1 através de uma interface web.</p>
+Este projeto cria um servidor web no microcontrolador NodeMCU, permitindo o controle remoto de um LED integrado através de uma interface web simples. Além disso, o NodeMCU oferece suporte para atualizações de firmware Over-The-Air (OTA).
 
-<h2>Funcionalidades</h2>
+## Funcionalidades
 
-<ul>
-  <li>Conexão do NodeMCU a uma rede Wi-Fi usando SSID e senha.</li>
-  <li>Configuração de um servidor web na porta 80, acessível pela rede local.</li>
-  <li>Interface web com botões para ligar e desligar o LED remotamente.</li>
-</ul>
+- Conexão à rede Wi-Fi configurada pelo usuário.
+- Configuração de um servidor web local na porta 80.
+- Interface web para ligar e desligar o LED remotamente.
+- Suporte a atualizações OTA para facilitar a manutenção do código.
 
-<h2>Componentes Necessários</h2>
+## Componentes Necessários
 
-<ul>
-  <li>NodeMCU.</li>
-  <li>Lâmpada.</li>
-  <li>2 metros de fio de 1,5mm².</li>
-  <li>Plug Macho Tomada.</li>
-  <li>Soquete Bocal de Lâmpada.</li>
-  <li>Plug Tomada Fêmea.</li>
-  <li>Módulo Relé 1 canal 5v.</li>
-</ul>
+- NodeMCU (ESP8266).
+- LED (integrado ao NodeMCU).
 
-<h2>Código do Projeto</h2>
+## Bibliotecas Utilizadas
 
-<h3>Bibliotecas Necessárias</h3>
-
-<p>Este projeto usa as bibliotecas:</p>
+O projeto faz uso das seguintes bibliotecas para conectar o microcontrolador à rede Wi-Fi, criar o servidor web e habilitar atualizações OTA:
 
 ```cpp
-#include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
+#include <ArduinoOTA.h>        // Suporte para atualizações Over-The-Air
+#include <ESP8266WiFi.h>       // Conexão Wi-Fi no ESP8266
+#include <ESP8266WebServer.h>  // Criação de servidor web no ESP8266
 ```
 
-<p>Essas bibliotecas permitem a conexão Wi-Fi e a criação de um servidor web no ESP8266.</p> 
+## Configurações de Rede
 
-<h3>Configurações de Rede</h3> 
-
-<p>No início do código, insira o nome (SSID) e a senha da rede Wi-Fi:</p>
+No início do código, você precisa configurar o nome (SSID) e a senha da rede Wi-Fi para conectar o NodeMCU:
 
 ```cpp
-const char* ssid = "Nome_da_rede";
-const char* password = "Senha_da_rede";
+const char* ssid = "Galaxy M515ABA";   // Substitua pelo nome da sua rede
+const char* password = "pediuasenha=mamou";  // Substitua pela senha da sua rede
 ```
 
-<p>Em seguida, configure o endereço IP do NodeMCU colocando um IP da sua faixa de rede:</p>
+Em seguida, configure o endereço IP do NodeMCU, que será usado para acessá-lo na rede:
 
 ```cpp
-IPAddress local_IP(192,168,227,241); // Altere para o IP desejado
-IPAddress gateway(192,168,227,217);
-IPAddress subnet(255,255,255,0);
+IPAddress local_IP(192,168,227,241); // IP estático desejado
+IPAddress gateway(192,168,227,217);  // Gateway da rede
+IPAddress subnet(255,255,255,0);     // Máscara de sub-rede
 ```
 
-<h3>Funções do Servidor Web</h3> 
+## Funções do Código
 
-<ul> 
-    <li><strong>Página Inicial (<code>handleRoot</code>)</strong>: Envia uma interface HTML com botões <code>ON</code> e <code>OFF</code> para controle da lâmpada.</li>
-    <li><strong>Ligar a lâmpada (<code>handleOn</code>)</strong>: Liga a lâmpada e envia uma mensagem de confirmação.</li> 
-    <li><strong>Desligar a lâmpada (<code>handleOff</code>)</strong>: Desliga a lâmpada e envia uma mensagem de confirmação.</li>
-</ul> 
+### 1. Configurar Wi-Fi
 
-<h3>Configuração do Servidor e Loop Principal</h3> 
+Esta função conecta o NodeMCU à rede Wi-Fi utilizando o SSID e a senha fornecidos, e tenta configurar um IP estático.
 
-<p>No <code>setup()</code>, o NodeMCU conecta-se ao Wi-Fi e configura as rotas do servidor:</p> 
-<ul> 
-    <li><code>/</code>: Página principal com os botões.</li> 
-    <li><code>/5/on</code>: Rota para ligar a lâmpada.</li> 
-    <li><code>/5/off</code>: Rota para desligar a lâmpada.</li> 
-</ul> 
-<p>O <code>loop()</code> mantém o servidor ativo, permitindo a recepção de novas requisições.</p> 
+```cpp
+void configureWiFi() {
+  WiFi.mode(WIFI_STA);  // Define o NodeMCU no modo de estação (STA)
+  if (!WiFi.config(local_IP, gateway, subnet)) {
+    Serial.println("Falha ao configurar IP.");
+  }
+  WiFi.begin(ssid, password);  // Inicia a conexão com a rede Wi-Fi
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");  // Aguarda a conexão
+  }
+  Serial.println("\nWi-Fi conectado!");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());  // Exibe o IP na serial
+}
+```
 
-<h2>Código Completo Presente no Arquivo <strong>main.cpp</strong></h2>
+### 2. Página Inicial do Servidor Web
+
+Esta função serve a página HTML com dois botões: um para ligar o LED e outro para desligá-lo.
+
+```cpp
+void handleRoot() {
+  String html = "<!DOCTYPE html><html>";
+  html += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
+  html += "<link rel=\"icon\" href=\"data:,\">";
+  html += "<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center; background-color: #4b5563; color: #f8fafc;}";
+  html += ".button { background-color: #22c55e; border: none; color: white; padding: 16px 40px;";
+  html += "text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}";
+  html += ".button2 {background-color: #ef4444;}</style></head>";
+  html += "<body><h1>Turning on LED of NodeMCU</h1>";
+  html += "<h2>Buttons</h2>";
+  html += "<button onclick=\"toggleLED('on')\" class=\"button\">ON</button>";
+  html += "<button onclick=\"toggleLED('off')\" class=\"button button2\">OFF</button>";
+  html += "<script>";
+  html += "function toggleLED(state) {";
+  html += "  var xhr = new XMLHttpRequest();";
+  html += "  xhr.open('GET', '/' + state, true);";
+  html += "  xhr.send();";
+  html += "}";
+  html += "</script>";
+  html += "</body></html>";
+  server.send(200, "text/html", html);  // Envia a página HTML para o cliente
+}
+```
+
+### 3. Ligar e Desligar o LED
+
+As duas funções abaixo ligam ou desligam o LED integrado ao NodeMCU (LED_BUILTIN). A resposta HTTP é uma mensagem de confirmação enviada ao cliente.
+
+```cpp
+void turnOnLED() {
+  digitalWrite(LED_BUILTIN, LOW);  // Liga o LED (inverte porque o LED é ativo em LOW)
+  server.send(200, "text/plain", "LED Ligado!");  // Envia mensagem de confirmação
+  Serial.println("LED foi ligado.");
+}
+
+void turnOffLED() {
+  digitalWrite(LED_BUILTIN, HIGH);  // Desliga o LED
+  server.send(200, "text/plain", "LED Desligado!");  // Envia mensagem de confirmação
+  Serial.println("LED foi desligado.");
+}
+```
+
+### 4. Configurações de Atualizações OTA
+
+O código abaixo configura o suporte para atualizações OTA (Over-The-Air), permitindo atualizar o firmware do NodeMCU sem precisar de conexão física. O código lida com o progresso e erros da atualização.
+
+```cpp
+void setupOTA() {
+  ArduinoOTA.setPassword("vaiCurintia");  // Define uma senha para as atualizações OTA
+
+  ArduinoOTA.onStart([]() {
+    Serial.println("Start");
+  });
+
+  ArduinoOTA.onEnd([]() {
+    Serial.println("\nEnd");
+  });
+
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));  // Exibe progresso
+  });
+
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+  });
+
+  ArduinoOTA.begin();  // Inicializa o OTA
+}
+```
+
+## Configuração do Servidor Web
+
+No `setup()`, o código inicializa a conexão Wi-Fi e configura as rotas do servidor para controlar o LED via HTTP.
+
+```cpp
+void setup() {
+  Serial.begin(9600);  // Inicializa a comunicação serial
+
+  pinMode(LED_BUILTIN, OUTPUT);  // Define o pino do LED como saída
+  digitalWrite(LED_BUILTIN, HIGH);  // Mantém o LED desligado inicialmente
+
+  configureWiFi();  // Configura o Wi-Fi
+  setupOTA();  // Configura o OTA
+
+  server.on("/", HTTP_GET, handleRoot);  // Rota para a página inicial
+  server.on("/on", HTTP_GET, turnOnLED);  // Rota para ligar o LED
+  server.on("/off", HTTP_GET, turnOffLED);  // Rota para desligar o LED
+
+  server.begin();  // Inicializa o servidor
+  Serial.println("Pronto para uso.");
+}
+```
+
+## Loop Principal
+
+O `loop()` mantém o servidor rodando e processa as atualizações OTA.
+
+```cpp
+void loop() {
+  ArduinoOTA.handle();  // Processa atualizações OTA
+  server.handleClient();  // Mantém o servidor web ativo
+}
+```
+
+## Conclusão
+
+Este projeto é ideal para aprender a controlar dispositivos remotamente usando um servidor web simples. O suporte para atualizações OTA facilita a manutenção e evolução do firmware sem a necessidade de desconectar o hardware.
