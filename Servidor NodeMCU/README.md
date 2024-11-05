@@ -1,6 +1,6 @@
 # Controle de LED via Servidor Web com NodeMCU
 
-Este projeto cria um servidor web no microcontrolador NodeMCU, permitindo o controle remoto de um LED integrado através de uma interface web simples. Além disso, o NodeMCU oferece suporte para atualizações de firmware Over-The-Air (OTA).
+Este projeto cria um servidor web no microcontrolador NodeMCU, permitindo o controle remoto de um LED integrado através de uma interface web simples. Além disso, o NodeMCU oferece suporte para atualizações de firmware OTA.
 
 ## Funcionalidades
 
@@ -30,7 +30,7 @@ No início do código, você precisa configurar o nome (SSID) e a senha da rede 
 
 ```cpp
 const char* ssid = "Galaxy M515ABA";   // Substitua pelo nome da sua rede
-const char* password = "pediuasenha=mamou";  // Substitua pela senha da sua rede
+const char* password = "";  // Substitua pela senha da sua rede
 ```
 
 Em seguida, configure o endereço IP do NodeMCU, que será usado para acessá-lo na rede:
