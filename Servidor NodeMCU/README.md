@@ -13,6 +13,9 @@ Este projeto cria um servidor web no microcontrolador NodeMCU, permitindo o cont
 
 - NodeMCU (ESP8266).
 - LED (integrado ao NodeMCU).
+- Rede Wi-Fi
+- Visual Studio Code
+- PlataformIO
 
 ## Bibliotecas Utilizadas
 
