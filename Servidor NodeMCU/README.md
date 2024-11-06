@@ -2,12 +2,15 @@
 
 Este projeto cria um servidor web no microcontrolador NodeMCU, permitindo o controle remoto de um LED integrado através de uma interface web simples. Além disso, o NodeMCU oferece suporte para atualizações de firmware OTA.
 
-## Funcionalidades
+## Descrição das Funcionalidades
 
 - Conexão à rede Wi-Fi configurada pelo usuário.
 - Configuração de um servidor web local na porta 80.
 - Interface web para ligar e desligar o LED remotamente.
 - Suporte a atualizações OTA para facilitar a manutenção do código.
+
+## Objetivos
+Desenvolver um web server no NodeMCU ESP8266 com capacidade OTA (Over-The-Air), permitindo a programação do dispositivo sem necessidade de conexão USB. O projeto deve incluir um servidor web que controle o LED embutido (LED_BUILTIN) e possibilitar atualizações do firmware OTA.
 
 ## Requisitos
 
@@ -17,7 +20,9 @@ Este projeto cria um servidor web no microcontrolador NodeMCU, permitindo o cont
 - Visual Studio Code
 - PlataformIO
 
-## Bibliotecas Utilizadas
+## Detalhamento do Código
+
+### Bibliotecas Utilizadas
 
 O projeto faz uso das seguintes bibliotecas para conectar o microcontrolador à rede Wi-Fi, criar o servidor web e habilitar atualizações OTA:
 
@@ -27,7 +32,7 @@ O projeto faz uso das seguintes bibliotecas para conectar o microcontrolador à 
 #include <ESP8266WebServer.h>  // Criação de servidor web no ESP8266
 ```
 
-## Configurações de Rede
+### Configurações de Rede
 
 No início do código, você precisa configurar o nome (SSID) e a senha da rede Wi-Fi para conectar o NodeMCU:
 
@@ -44,9 +49,7 @@ IPAddress gateway(192,168,227,217);  // Gateway da rede
 IPAddress subnet(255,255,255,0);     // Máscara de sub-rede
 ```
 
-## Funções do Código
-
-### 1. Configurar Wi-Fi
+### Configuração do Wi-Fi
 
 Esta função conecta o NodeMCU à rede Wi-Fi utilizando o SSID e a senha fornecidos, e tenta configurar um IP estático.
 
@@ -67,7 +70,7 @@ void configureWiFi() {
 }
 ```
 
-### 2. Página Inicial do Servidor Web
+### Página HTML do Servidor Web
 
 Esta função serve a página HTML com dois botões: um para ligar o LED e outro para desligá-lo.
 
@@ -96,7 +99,7 @@ void handleRoot() {
 }
 ```
 
-### 3. Ligar e Desligar o LED
+### Liga e Desliga o LED
 
 As duas funções abaixo ligam ou desligam o LED integrado ao NodeMCU (LED_BUILTIN). A resposta HTTP é uma mensagem de confirmação enviada ao cliente.
 
@@ -114,27 +117,34 @@ void turnOffLED() {
 }
 ```
 
-### 4. Configurações de Atualizações OTA
+### Configurações de Atualizações OTA e do Servidor Web
 
 O código abaixo configura o suporte para atualizações OTA (Over-The-Air), permitindo atualizar o firmware do NodeMCU sem precisar de conexão física. O código lida com o progresso e erros da atualização.
 
-```cpp
-void setupOTA() {
-  ArduinoOTA.setPassword("vaiCurintia");  // Define uma senha para as atualizações OTA
+No `setup()`, o código inicializa a conexão Wi-Fi e configura as rotas do servidor para controlar o LED via HTTP.
 
-  ArduinoOTA.onStart([]() {
+```cpp
+void setup() {
+  Serial.begin(9600); // Inicializa a comunicação serial
+
+  pinMode(led, OUTPUT); // Define o pino LED como saída
+  digitalWrite(led, HIGH); // Inicia com o LED desligado
+
+  ArduinoOTA.setPassword("vaiCurintia"); // Define uma senha para as atualizações OTA
+
+  configureWiFi(); // Configura o Wi-Fi
+
+  ArduinoOTA.onStart([](){
     Serial.println("Start");
   });
-
-  ArduinoOTA.onEnd([]() {
+  ArduinoOTA.onEnd([](){
     Serial.println("\nEnd");
   });
-
-  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));  // Exibe progresso
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total){
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100))); // Exibe o Progresso
   });
-
-  ArduinoOTA.onError([](ota_error_t error) {
+  /* Função assíncrona que lida com os erros */
+  ArduinoOTA.onError([](ota_error_t error){
     Serial.printf("Error[%u]: ", error);
     if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
     else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
@@ -142,34 +152,17 @@ void setupOTA() {
     else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
   });
 
-  ArduinoOTA.begin();  // Inicializa o OTA
-}
-```
+  server.on("/", HTTP_GET, handleRoot); // Rota para a página inicial
+  server.on("/on", HTTP_GET, turnOnLED); // Rota para ligar o LED
+  server.on("/off", HTTP_GET, turnOffLED); // Rota para desligar o LED
+  server.begin(); // Inicializa o servidor
 
-## Configuração do Servidor Web
-
-No `setup()`, o código inicializa a conexão Wi-Fi e configura as rotas do servidor para controlar o LED via HTTP.
-
-```cpp
-void setup() {
-  Serial.begin(9600);  // Inicializa a comunicação serial
-
-  pinMode(LED_BUILTIN, OUTPUT);  // Define o pino do LED como saída
-  digitalWrite(LED_BUILTIN, HIGH);  // Mantém o LED desligado inicialmente
-
-  configureWiFi();  // Configura o Wi-Fi
-  setupOTA();  // Configura o OTA
-
-  server.on("/", HTTP_GET, handleRoot);  // Rota para a página inicial
-  server.on("/on", HTTP_GET, turnOnLED);  // Rota para ligar o LED
-  server.on("/off", HTTP_GET, turnOffLED);  // Rota para desligar o LED
-
-  server.begin();  // Inicializa o servidor
+  ArduinoOTA.begin(); // Inicializa o OTA
   Serial.println("Pronto para uso.");
 }
 ```
 
-## Loop Principal
+### Loop Principal
 
 O `loop()` mantém o servidor rodando e processa as atualizações OTA.
 
@@ -179,7 +172,3 @@ void loop() {
   server.handleClient();  // Mantém o servidor web ativo
 }
 ```
-
-## Conclusão
-
-Este projeto é ideal para aprender a controlar dispositivos remotamente usando um servidor web simples. O suporte para atualizações OTA facilita a manutenção e evolução do firmware sem a necessidade de desconectar o hardware.
