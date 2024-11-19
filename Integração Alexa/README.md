@@ -126,3 +126,7 @@ void loop() {
 ## Considerações Finais
 
 Esse projeto é uma implementação básica para controle remoto e local de dispositivos com ESP8266, ideal para automação residencial. Ele permite que o usuário alterne facilmente entre o controle remoto e o físico, garantindo flexibilidade e conveniência na operação.
+
+## Arquitetura
+
+![Arquitetura Integração Alexa](../.github/Arquitetura Integração Alexa.png)
