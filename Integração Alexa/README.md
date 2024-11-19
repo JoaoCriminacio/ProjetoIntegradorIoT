@@ -33,7 +33,6 @@ Este projeto é ideal para automação de dispositivos, permitindo controle remo
 - **Fio de Energia**
 - **Cabo Macho**
 
-
 ## Configuração do Código
 
 1. **Bibliotecas Necessárias**:
@@ -130,4 +129,4 @@ Esse projeto é uma implementação básica para controle remoto e local de disp
 
 ## Imagem
 
-<img href="../.github/img.jpg">
+<img href="../assets/img.jpg">
