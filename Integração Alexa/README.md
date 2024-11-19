@@ -126,7 +126,3 @@ void loop() {
 ## Considerações Finais
 
 Esse projeto é uma implementação básica para controle remoto e local de dispositivos com ESP8266, ideal para automação residencial. Ele permite que o usuário alterne facilmente entre o controle remoto e o físico, garantindo flexibilidade e conveniência na operação.
-
-## Imagem
-
-<img href="../assets/img.jpg">
