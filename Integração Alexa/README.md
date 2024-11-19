@@ -28,6 +28,11 @@ Este projeto é ideal para automação de dispositivos, permitindo controle remo
 - **Conta SinricPro**
 - **Rede Wi-Fi**
 - **IDE Arduino**
+- **Lâmpada**
+- **Relé**
+- **Fio de Energia**
+- **Cabo Macho**
+
 
 ## Configuração do Código
 
