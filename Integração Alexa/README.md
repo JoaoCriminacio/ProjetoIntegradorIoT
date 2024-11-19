@@ -129,4 +129,6 @@ Esse projeto é uma implementação básica para controle remoto e local de disp
 
 ## Arquitetura
 
-![Arquitetura Integração Alexa](../.github/Arquitetura Integração Alexa.png)
+<p align="center">
+  <img alt="Arquitetura Integração Alexa" src="../.github/Arquitetura Integração Alexa.png" width="700">
+</p>
