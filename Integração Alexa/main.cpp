@@ -7,9 +7,9 @@
 // Define constantes para conexão Wi-Fi e SinricPro
 #define WIFI_SSID "Galaxy M515ABA"
 #define WIFI_PASS "pediuasenha=mamou"
-#define APP_KEY "82057f31-8da3-47c0-8ff1-baec887b4197"
-#define APP_SECRET "b9394af3-dad1-4e1c-bfc2-cf6a6cf2a260-d5d2aeae-96ca-4762-8145-f1e65aea7dcf"
-#define SWITCH_ID "6733d40b88a12c713ba8e70e"
+#define APP_KEY ""
+#define APP_SECRET ""
+#define SWITCH_ID ""
 #define BAUD_RATE 9600
 
 // Define os pinos GPIO para o botão e o rele
